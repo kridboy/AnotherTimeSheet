@@ -1,7 +1,5 @@
 package com.keisse.model;
 
-import com.keisse.util.WorkRate;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,7 +14,7 @@ public final class Performance {
     private long extraMinutes;
     private LocalTime start;
     private LocalTime end;
-    private DayOfWeek dayOfPerformance;//TODO gebruiken!!!
+    private DayOfWeek dayOfPerformance;
 
     public Performance() {
     }
@@ -24,10 +22,18 @@ public final class Performance {
     public Performance(LocalTime start, LocalTime end, LocalDate date) {
         setStart(start);
         setEnd(end);
+        setDayOfPerformance(date.getDayOfWeek());
 
         determineWage(date);
     }
 
+    public DayOfWeek getDayOfPerformance() {
+        return dayOfPerformance;
+    }
+
+    public void setDayOfPerformance(DayOfWeek dayOfPerformance) {
+        this.dayOfPerformance = dayOfPerformance;
+    }
 
     public double getUntaxedWage() {
         return untaxedWage;
@@ -93,13 +99,15 @@ public final class Performance {
     private void determineWage(LocalDate date) {
         long normalMin = ChronoUnit.MINUTES.between(getStart(), getEnd());
 
-        switch (date.getDayOfWeek().getValue()) {
-            case 6:
-                weekendWage(normalMin, ZATERDAG.calc(normalMin), getEnd(), 6);
+        switch (getDayOfPerformance()) {
+            case SATURDAY:
+                if(getEnd().equals(MIDNIGHT)) normalMin++;
+                fillWeekendWage(normalMin, ZATERDAG.calc(normalMin));
                 break;
 
-            case 7:
-                weekendWage(normalMin, ZONDAG.calc(normalMin), getEnd(), 7);
+            case SUNDAY:
+                if(getEnd().equals(MIDNIGHT)) normalMin++;
+                fillWeekendWage(normalMin, ZONDAG.calc(normalMin));
                 break;
 
             default:
@@ -108,23 +116,11 @@ public final class Performance {
         }
     }
 
-    private void weekendWage(long minutes, double rate, LocalTime end, int dayOfWeek) {
-        if (dayOfWeek == 6) {
-            if (end.equals(MIDNIGHT)) {
-                setExtraMinutes(minutes + 1);
-                setUntaxedWage(rate+ ZATERDAG.calc(1));
-            } else {
-                setExtraMinutes(minutes);
-                setUntaxedWage(rate);
-            }
-        } else if (end.equals(MIDNIGHT)) {
-            setExtraMinutes(minutes + 1);
-            setUntaxedWage(rate+ ZONDAG.calc(1));
-        } else {
-            setExtraMinutes(minutes);
-            setUntaxedWage(rate);
-        }
-    }//TODO split in function :)
+    private void fillWeekendWage(long extraMinutes, double rate) {
+        setExtraMinutes(extraMinutes);
+        setUntaxedWage(rate);
+    }
+
 
     private void weekWage(long normalMin, LocalTime end) {
         long extraMin = getStart().isBefore(NORMAL_RATE_START) ? ChronoUnit.MINUTES.between(start, NORMAL_RATE_START) : 0;
@@ -137,8 +133,7 @@ public final class Performance {
         normalMin -= extraMin;
         setNormalMinutes(normalMin);
         setExtraMinutes(extraMin);
-        setUntaxedWage(NORMAAL.calc(normalMin));
-        setUntaxedWage(OVERUREN.calc(extraMin) + getUntaxedWage());
+        setUntaxedWage(NORMAAL.calc(normalMin)+OVERUREN.calc(extraMin));
     }
 
     @Override
