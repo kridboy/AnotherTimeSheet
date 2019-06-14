@@ -117,3 +117,4 @@ public final class WorkWeek {
     }
 
 }
+//TODO nog een paar kleine dingskes maar da's voor andere keer
