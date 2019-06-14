@@ -42,7 +42,6 @@ public final class WorkWeek {
         return false;
     }
 
-
     public boolean addPerformance(LocalDate date, LocalTime start, LocalTime end) {
         for (WorkDay e : getWorkWeek())
             if (e.getDate().equals(date) && e.addPerformance(start, end)) return true;

@@ -95,7 +95,6 @@ public final class Performance {
         return (getUntaxedWage() / 100) * 21;
     }
 
-
     private void determineWage() {
         long normalMin = ChronoUnit.MINUTES.between(getStart(), getEnd());
 
@@ -120,7 +119,6 @@ public final class Performance {
         setExtraMinutes(extraMinutes);
         setUntaxedWage(rate);
     }
-
 
     private void fillWeekWage(long normalMin, LocalTime end) {
         long extraMin = getStart().isBefore(NORMAL_RATE_START) ? ChronoUnit.MINUTES.between(start, NORMAL_RATE_START) : 0;

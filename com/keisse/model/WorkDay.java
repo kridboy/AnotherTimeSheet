@@ -98,7 +98,7 @@ public final class WorkDay {
 
     public StringBuilder printPerformances() {
         StringBuilder builder = new StringBuilder();
-        performances.stream()
+        getPerformances().stream()
                 .map(e -> getDate().format(DATE_FORMATTER) + "\t" + e.toString())
                 .forEach(builder::append);
         return builder;
