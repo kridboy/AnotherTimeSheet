@@ -16,7 +16,8 @@ public final class Performance {
     private LocalTime start;
     private LocalTime end;
 
-    public Performance(){}
+    public Performance() {
+    }
 
     public Performance(LocalTime start, LocalTime end, LocalDate date) {
         setStart(start);
@@ -66,12 +67,12 @@ public final class Performance {
         this.end = end;
     }
 
-    public LocalTime normalHours(){
-        return LocalTime.of(0,0).plusMinutes(getNormalMinutes());
+    public LocalTime normalHours() {
+        return LocalTime.of(0, 0).plusMinutes(getNormalMinutes());
     }
 
-    public LocalTime extraHours(){
-        return LocalTime.of(0,0).plusMinutes(getExtraMinutes());
+    public LocalTime extraHours() {
+        return LocalTime.of(0, 0).plusMinutes(getExtraMinutes());
     }
 
     public double normalWage() {
@@ -82,8 +83,8 @@ public final class Performance {
         return OVERUREN.calc(getExtraMinutes());
     }
 
-    public double btw(){
-        return (getUntaxedWage()/100)*21;
+    public double btw() {
+        return (getUntaxedWage() / 100) * 21;
     }
 
 
@@ -133,6 +134,6 @@ public final class Performance {
 
     @Override
     public String toString() {
-        return String.format("%tR\t%tR\t%tR\t%tR\t\t%.2f\n", getStart(),getEnd(),normalHours(),extraHours(),getUntaxedWage());
+        return String.format("%tR\t%tR\t%tR\t%tR\t\t%.2f\n", getStart(), getEnd(), normalHours(), extraHours(), getUntaxedWage());
     }
 }

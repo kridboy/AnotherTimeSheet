@@ -30,28 +30,36 @@ public class WorkWeek {
         for (WorkDay e : getWorkWeek()) e.clear();
     }
 
+    public boolean clear(LocalDate date) {
+        for (WorkDay e : getWorkWeek()) if (e.getDate().equals(date)) return true;
+        return false;
+    }
+
     public boolean addPerformance(LocalDate date, LocalTime start, LocalTime end) {
         for (WorkDay e : getWorkWeek()) if (e.getDate().equals(date) && e.addPerformance(start, end)) return true;
         return false;
     }
 
     public StringBuilder printDay(LocalDate date) {
-        StringBuilder build = new StringBuilder();
+        StringBuilder builder = PERFORMANCES_HEADER;
         Stream.of(getWorkWeek())
                 .filter(e -> e.getDate().equals(date))
-                .forEach(build::append);
-        return build;
+                .map(WorkDay::printPerformances)
+                .forEach(builder::append);
+        if (builder.equals(PERFORMANCES_HEADER)) return new StringBuilder("\nEr zijn geen prestaties voor deze dag.\n");
+        builder.append(printWage(date));
+        return builder;
 
     }
 
     public StringBuilder printAllDays() {
-        StringBuilder build = new StringBuilder(PERFORMANCES_HEADER);
+        StringBuilder builder = PERFORMANCES_HEADER;
         Stream.of(getWorkWeek())
                 .filter(e -> e.getPerformances().size() != 0)
                 .map(WorkDay::printPerformances)
-                .forEach(build::append);
-        build.append(printTotalWage());
-        return build;
+                .forEach(builder::append);
+        builder.append(printTotalWage());
+        return builder;
     }
 
     public StringBuilder printTotalWage() {
@@ -90,8 +98,8 @@ public class WorkWeek {
             else if (e.getDate().equals(date) && e.getDate().getDayOfWeek().getValue() == 6)
                 return collectWageData(0d, 0d, 0d, e.getExtraWage(), e.getUntaxedTotal(), e.getBtw());
 
-        else
-            return collectWageData(e.getNormalWage(), e.getExtraWage(), 0d,0d, e.getUntaxedTotal(), e.getBtw());
+            else
+                return collectWageData(e.getNormalWage(), e.getExtraWage(), 0d, 0d, e.getUntaxedTotal(), e.getBtw());
 
         return new StringBuilder("empty?");
     }

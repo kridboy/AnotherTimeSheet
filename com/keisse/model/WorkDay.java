@@ -14,7 +14,9 @@ public class WorkDay {
     private double normalWage;
     private double btw;
     private double untaxedTotal;
-    public WorkDay(){}
+
+    public WorkDay() {
+    }
 
     public WorkDay(LocalDate date) {
         setDate(date);
@@ -66,14 +68,14 @@ public class WorkDay {
 
     public boolean addPerformance(LocalTime start, LocalTime end) {
         //if (start.isBefore(end) && notBetweenPerformance(start, end)) {
-            Performance performance = new Performance(start, end, getDate());
-            performances.add(performance);
+        Performance performance = new Performance(start, end, getDate());
+        performances.add(performance);
 
-            setUntaxedTotal(performance.getUntaxedWage() + getUntaxedTotal());
-            setBtw(performance.btw() + getBtw());
-            setNormalWage(performance.normalWage() + getNormalWage());
-            setExtraWage(performance.extraWage() + getExtraWage());
-            return true;
+        setUntaxedTotal(performance.getUntaxedWage() + getUntaxedTotal());
+        setBtw(performance.btw() + getBtw());
+        setNormalWage(performance.normalWage() + getNormalWage());
+        setExtraWage(performance.extraWage() + getExtraWage());
+        return true;
         //}
         //return false;
     }
@@ -93,7 +95,7 @@ public class WorkDay {
     public StringBuilder printPerformances() {
         StringBuilder builder = new StringBuilder();
         performances.stream()
-                .map(e ->getDate().format(DATE_FORMATTER) + "\t"+  e.toString())
+                .map(e -> getDate().format(DATE_FORMATTER) + "\t" + e.toString())
                 .forEach(builder::append);
         return builder;
     }

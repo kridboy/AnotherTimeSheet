@@ -12,7 +12,7 @@ public abstract class FormatUtil {
     /**
      * The constant PERFORMANCES_HEADER returns a header string for printing prestations.
      */
-    public static final String PERFORMANCES_HEADER = "\nDatum\t\tBegin\tEinde\tNormaal\tOveruren\tWage\n";
+    public static final StringBuilder PERFORMANCES_HEADER = new StringBuilder("\nDatum\t\tBegin\tEinde\tNormaal\tOveruren\tWage\n");
     /**
      * The constant DATE_FORMATTER formats a date to follow the given pattern.
      */
@@ -39,6 +39,7 @@ public abstract class FormatUtil {
     public static final String DAY_NOT_IN_WEEK = "\nDeze dag bevind zich niet in de werkweek.\n";
 
     public static final LocalTime MIDNIGHT = LocalTime.of(23, 59);
+
     private FormatUtil() {
         throw new IllegalStateException("Utility class");
     }
