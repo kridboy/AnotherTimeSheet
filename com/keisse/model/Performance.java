@@ -2,6 +2,7 @@ package com.keisse.model;
 
 import com.keisse.util.WorkRate;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -15,6 +16,7 @@ public final class Performance {
     private long extraMinutes;
     private LocalTime start;
     private LocalTime end;
+    private DayOfWeek dayOfPerformance;//TODO gebruiken!!!
 
     public Performance() {
     }
@@ -92,10 +94,6 @@ public final class Performance {
         long normalMin = ChronoUnit.MINUTES.between(getStart(), getEnd());
 
         switch (date.getDayOfWeek().getValue()) {
-            default:
-                weekWage(normalMin, getEnd());
-                break;
-
             case 6:
                 weekendWage(normalMin, ZATERDAG.calc(normalMin), getEnd(), 6);
                 break;
@@ -104,6 +102,9 @@ public final class Performance {
                 weekendWage(normalMin, ZONDAG.calc(normalMin), getEnd(), 7);
                 break;
 
+            default:
+                weekWage(normalMin, getEnd());
+                break;
         }
     }
 
@@ -123,7 +124,7 @@ public final class Performance {
             setExtraMinutes(minutes);
             setUntaxedWage(rate);
         }
-    }
+    }//TODO split in function :)
 
     private void weekWage(long normalMin, LocalTime end) {
         long extraMin = getStart().isBefore(NORMAL_RATE_START) ? ChronoUnit.MINUTES.between(start, NORMAL_RATE_START) : 0;

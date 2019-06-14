@@ -2,12 +2,18 @@ package com.keisse.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static com.keisse.util.FormatUtil.PERFORMANCES_HEADER;
 
 public final class WorkWeek {
     WorkDay[] workWeek = new WorkDay[7];
+
+
+    public WorkDay[] getWorkWeek() {
+        return workWeek;
+    }
 
     public void setWorkWeek(LocalDate date) {
         LocalDate firstOfWeek = date.minusDays(date.getDayOfWeek().getValue() - 1L);
@@ -21,10 +27,6 @@ public final class WorkWeek {
 
     public WorkWeek(LocalDate date) {
         setWorkWeek(date);
-    }
-
-    public WorkDay[] getWorkWeek() {
-        return workWeek;
     }
 
     public void reset() {
@@ -69,21 +71,15 @@ public final class WorkWeek {
     }
 
     public StringBuilder printTotalWage() {
-        Double normal = Stream.of(getWorkWeek())
-                .map(WorkDay::getNormalWage)
-                .reduce(0d, Double::sum);
+        Function<WorkDay,Double> normalWageFunc = WorkDay::getNormalWage;
+        Function<WorkDay,Double> extraWageFunc = WorkDay::getExtraWage;
+        Function<WorkDay,Double> untaxedTotalFunc = WorkDay::getUntaxedTotal;
+        Function<WorkDay,Double> btwFunc = WorkDay::getBtw;
 
-        Double extra = Stream.of(getWorkWeek())
-                .map(WorkDay::getExtraWage)
-                .reduce(0d, Double::sum);
-
-        Double unTaxed = Stream.of(getWorkWeek())
-                .map(WorkDay::getUntaxedTotal)
-                .reduce(0d, Double::sum);
-
-        Double btw = Stream.of(getWorkWeek())
-                .map(WorkDay::getBtw)
-                .reduce(0d, Double::sum);
+        Double normal = printTotalWagePipeline(normalWageFunc);
+        Double extra = printTotalWagePipeline(extraWageFunc);
+        Double unTaxed = printTotalWagePipeline(untaxedTotalFunc);
+        Double btw = printTotalWagePipeline(btwFunc);
 
         Double sat = workWeek[5].getExtraWage();
         Double sun = workWeek[6].getExtraWage();
@@ -91,6 +87,12 @@ public final class WorkWeek {
         StringBuilder builder = collectWageData(normal, extra, sat, sun, unTaxed, btw);
 
         return builder;
+    }
+
+    private Double printTotalWagePipeline(Function<WorkDay, Double> func){
+        return Stream.of(getWorkWeek())
+                .map(func)
+                .reduce(0d, Double::sum);
     }
 
     public StringBuilder printWage(LocalDate date) {
