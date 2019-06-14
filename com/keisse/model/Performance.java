@@ -143,6 +143,6 @@ public final class Performance {
 
     @Override
     public String toString() {
-        return String.format("%tR\t%tR\t%tR\t%tR\t\t%.2f\n", getStart(), getEnd(), normalHours(), extraHours(), getUntaxedWage());
+        return String.format("%tR\t%tR\t%tR\t%tR\t\t%.2f1%n", getStart(), getEnd(), normalHours(), extraHours(), getUntaxedWage());
     }
 }
