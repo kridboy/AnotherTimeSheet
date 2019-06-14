@@ -24,7 +24,7 @@ public final class Performance {
         setEnd(end);
         setDayOfPerformance(date.getDayOfWeek());
 
-        determineWage(date);
+        determineWage();
     }
 
     public DayOfWeek getDayOfPerformance() {
@@ -96,7 +96,7 @@ public final class Performance {
     }
 
 
-    private void determineWage(LocalDate date) {
+    private void determineWage() {
         long normalMin = ChronoUnit.MINUTES.between(getStart(), getEnd());
 
         switch (getDayOfPerformance()) {

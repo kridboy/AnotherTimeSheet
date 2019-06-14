@@ -84,9 +84,8 @@ public final class WorkWeek {
         Double sat = workWeek[5].getExtraWage();
         Double sun = workWeek[6].getExtraWage();
 
-        StringBuilder builder = collectWageData(normal, extra, sat, sun, unTaxed, btw);
+        return collectWageData(normal, extra, sat, sun, unTaxed, btw);
 
-        return builder;
     }
 
     private Double printTotalWagePipeline(Function<WorkDay, Double> func){
@@ -96,7 +95,6 @@ public final class WorkWeek {
     }
 
     public StringBuilder printWage(LocalDate date) {
-        WorkDay workDay = new WorkDay();
         for (WorkDay e : workWeek)
             if (e.getDate().equals(date) && e.getDate().getDayOfWeek().getValue() == 6)
                 return collectWageData(0d, 0d, e.getExtraWage(), 0d, e.getUntaxedTotal(), e.getBtw());
@@ -113,15 +111,15 @@ public final class WorkWeek {
     private StringBuilder collectWageData(Double normal, Double extra, Double sat, Double sun, Double unTaxed, Double btw) {
         StringBuilder builder = new StringBuilder();
         builder.append("\t\t=====\n")
-                .append(String.format("Normaal:\t%.2f€\n", normal))
-                .append(String.format("Overuren:\t%.2f€\n", extra))
-                .append(String.format("Zaterdag:\t%.2f€\n", sat))
-                .append(String.format("Zondag:\t%.2f€\n", sun))
-                .append("\t\t=====\n")
-                .append(String.format("Bruto:\t%.2f€\n", unTaxed))
-                .append(String.format("Extra:\t%.2f€\n", btw))
-                .append("\t\t=====\n")
-                .append(String.format("totaal:\t%.2f€\n", unTaxed - btw));
+                .append(String.format("Normaal:\t%.2f€´%n", normal))
+                .append(String.format("Overuren:\t%.2f€%n", extra))
+                .append(String.format("Zaterdag:\t%.2f€%n", sat))
+                .append(String.format("Zondag:\t\t%.2f€%n", sun))
+                .append("\t\t=====%n")
+                .append(String.format("Bruto:\t\t%.2f€%n", unTaxed))
+                .append(String.format("Extra:\t\t%.2f€%n", btw))
+                .append("\t\t=====%n")
+                .append(String.format("totaal:\t\t%.2f€%n", unTaxed - btw));
         return builder;
     }
 
