@@ -88,15 +88,14 @@ public class WorkWeek {
 
     public StringBuilder printWage(LocalDate date) {
         WorkDay workDay = new WorkDay();
-        //TODO LOGICA FOUTJE HIER! oplossen morgen dus
         for (WorkDay e : workWeek)
             if (e.getDate().equals(date) && e.getDate().getDayOfWeek().getValue() == 6)
                 return collectWageData(0d, 0d, e.getExtraWage(), 0d, e.getUntaxedTotal(), e.getBtw());
 
-            else if (e.getDate().equals(date) && e.getDate().getDayOfWeek().getValue() == 6)
+            else if (e.getDate().equals(date) && e.getDate().getDayOfWeek().getValue() == 7)
                 return collectWageData(0d, 0d, 0d, e.getExtraWage(), e.getUntaxedTotal(), e.getBtw());
 
-            else
+            else if(e.getDate().equals(date))
                 return collectWageData(e.getNormalWage(), e.getExtraWage(), 0d, 0d, e.getUntaxedTotal(), e.getBtw());
 
         return new StringBuilder("empty?");
