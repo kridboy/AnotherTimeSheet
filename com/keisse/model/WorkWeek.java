@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import static com.keisse.util.FormatUtil.PERFORMANCES_HEADER;
 
 public final class WorkWeek {
-    WorkDay[] workWeek = new WorkDay[7];
+    public WorkDay[] workWeek = new WorkDay[7];
 
 
     public WorkDay[] getWorkWeek() {
@@ -70,22 +70,18 @@ public final class WorkWeek {
         return builder;
     }
 
-    public StringBuilder printTotalWage() {
-        Function<WorkDay,Double> normalWageFunc = WorkDay::getNormalWage;
-        Function<WorkDay,Double> extraWageFunc = WorkDay::getExtraWage;
-        Function<WorkDay,Double> untaxedTotalFunc = WorkDay::getUntaxedTotal;
-        Function<WorkDay,Double> btwFunc = WorkDay::getBtw;
+    private StringBuilder printTotalWage() {
+        //Function<WorkDay,Double> normalWageFunc = WorkDay::getNormalWage;
 
-        Double normal = printTotalWagePipeline(normalWageFunc);
-        Double extra = printTotalWagePipeline(extraWageFunc);
-        Double unTaxed = printTotalWagePipeline(untaxedTotalFunc);
-        Double btw = printTotalWagePipeline(btwFunc);
+        Double normal = printTotalWagePipeline(WorkDay::getNormalWage);
+        Double extra = printTotalWagePipeline(WorkDay::getExtraWage);
+        Double unTaxed = printTotalWagePipeline(WorkDay::getUntaxedTotal);
+        Double btw = printTotalWagePipeline(WorkDay::getBtw);
 
         Double sat = workWeek[5].getExtraWage();
         Double sun = workWeek[6].getExtraWage();
 
         return collectWageData(normal, extra, sat, sun, unTaxed, btw);
-
     }
 
     private Double printTotalWagePipeline(Function<WorkDay, Double> func){
@@ -109,8 +105,7 @@ public final class WorkWeek {
     }
 
     private StringBuilder collectWageData(Double normal, Double extra, Double sat, Double sun, Double unTaxed, Double btw) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("\t\t=====\n")
+        return new StringBuilder("\t\t=====\n")
                 .append(String.format("Normaal:\t%.2f€´%n", normal))
                 .append(String.format("Overuren:\t%.2f€%n", extra))
                 .append(String.format("Zaterdag:\t%.2f€%n", sat))
@@ -120,7 +115,6 @@ public final class WorkWeek {
                 .append(String.format("Extra:\t\t%.2f€%n", btw))
                 .append("\t\t=====%n")
                 .append(String.format("totaal:\t\t%.2f€%n", unTaxed - btw));
-        return builder;
     }
 
 }
