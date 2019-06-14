@@ -42,10 +42,10 @@ public class CaseController {
     }
 
     private void newWeek(WorkWeek w, Scanner kb) {
-        System.out.print("\ngeef start van werkweek: ");
+        System.out.print("\nGeef een dag in de werkweek: ");
         LocalDate dag = LocalDate.parse(kb.next(), FormatUtil.DATE_FORMATTER);
         w.setWorkWeek(dag);
-        System.out.println("Werkweek gegenereerd\n");
+        System.out.println("Werkweek gegenereerd%n");
     }
 
     private void addNewPerformance(WorkWeek w, Scanner kb) {

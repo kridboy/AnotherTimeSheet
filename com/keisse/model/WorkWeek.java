@@ -105,14 +105,14 @@ public final class WorkWeek {
 
     private StringBuilder collectWageData(Double normal, Double extra, Double sat, Double sun, Double unTaxed, Double btw) {
         return new StringBuilder("\t\t=====\n")
-                .append(String.format("Normaal:\t%.2f€´%n", normal))
+                .append(String.format("Normaal:\t%.2f€%n", normal))
                 .append(String.format("Overuren:\t%.2f€%n", extra))
                 .append(String.format("Zaterdag:\t%.2f€%n", sat))
                 .append(String.format("Zondag:\t\t%.2f€%n", sun))
-                .append("\t\t=====%n")
+                .append("\t\t=====\n")
                 .append(String.format("Bruto:\t\t%.2f€%n", unTaxed))
                 .append(String.format("Extra:\t\t%.2f€%n", btw))
-                .append("\t\t=====%n")
+                .append("\t\t=====\n")
                 .append(String.format("totaal:\t\t%.2f€%n", unTaxed - btw));
     }
 
