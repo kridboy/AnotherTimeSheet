@@ -46,7 +46,6 @@ public class WorkWeek {
                 .filter(e -> e.getDate().equals(date))
                 .map(WorkDay::printPerformances)
                 .forEach(builder::append);
-        if (builder.equals(PERFORMANCES_HEADER)) return new StringBuilder("\nEr zijn geen prestaties voor deze dag.\n");
         builder.append(printWage(date));
         return builder;
 
