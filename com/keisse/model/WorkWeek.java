@@ -54,7 +54,7 @@ public class WorkWeek {
     public StringBuilder printAllDays() {
         StringBuilder builder = PERFORMANCES_HEADER;
         Stream.of(getWorkWeek())
-                .filter(e -> e.getPerformances().size() != 0)
+                .filter(e -> e.getPerformances().isEmpty())
                 .map(WorkDay::printPerformances)
                 .forEach(builder::append);
         builder.append(printTotalWage());
@@ -62,8 +62,6 @@ public class WorkWeek {
     }
 
     public StringBuilder printTotalWage() {
-        StringBuilder builder = new StringBuilder();
-
         Double normal = Stream.of(getWorkWeek())
                 .map(WorkDay::getNormalWage)
                 .reduce(0d, Double::sum);
@@ -83,7 +81,7 @@ public class WorkWeek {
         Double sat = workWeek[5].getExtraWage();
         Double sun = workWeek[6].getExtraWage();
 
-        builder = collectWageData(normal, extra, sat, sun, unTaxed, btw);
+        StringBuilder builder = collectWageData(normal, extra, sat, sun, unTaxed, btw);
 
         return builder;
     }
