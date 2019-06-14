@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 import static com.keisse.util.FormatUtil.PERFORMANCES_HEADER;
 
-public class WorkWeek {
+public final class WorkWeek {
     WorkDay[] workWeek = new WorkDay[7];
 
     public void setWorkWeek(LocalDate date) {
@@ -16,6 +16,7 @@ public class WorkWeek {
     }
 
     public WorkWeek() {
+        setWorkWeek(LocalDate.of(2019,12,21));
     }
 
     public WorkWeek(LocalDate date) {
@@ -31,12 +32,18 @@ public class WorkWeek {
     }
 
     public boolean clear(LocalDate date) {
-        for (WorkDay e : getWorkWeek()) if (e.getDate().equals(date)) return true;
+        for (WorkDay e : getWorkWeek())
+            if (e.getDate().equals(date)) {
+                e.clear();
+                return true;
+            }
         return false;
     }
 
+
     public boolean addPerformance(LocalDate date, LocalTime start, LocalTime end) {
-        for (WorkDay e : getWorkWeek()) if (e.getDate().equals(date) && e.addPerformance(start, end)) return true;
+        for (WorkDay e : getWorkWeek())
+            if (e.getDate().equals(date) && e.addPerformance(start, end)) return true;
         return false;
     }
 
@@ -95,7 +102,7 @@ public class WorkWeek {
             else if (e.getDate().equals(date) && e.getDate().getDayOfWeek().getValue() == 7)
                 return collectWageData(0d, 0d, 0d, e.getExtraWage(), e.getUntaxedTotal(), e.getBtw());
 
-            else if(e.getDate().equals(date))
+            else if (e.getDate().equals(date))
                 return collectWageData(e.getNormalWage(), e.getExtraWage(), 0d, 0d, e.getUntaxedTotal(), e.getBtw());
 
         return new StringBuilder("empty?");

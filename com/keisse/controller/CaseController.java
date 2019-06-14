@@ -18,10 +18,10 @@ public class CaseController {
                 newWeek(w, kb);
                 break;
             case 2:
-                newPrestation(w, kb);
+                addNewPerformance(w, kb);
                 break;
             case 3:
-                showPrestation(w, kb);
+                showPerformances(w, kb);
                 break;
             case 4:
                 removeDay(w, kb);
@@ -48,7 +48,7 @@ public class CaseController {
         System.out.println("Werkweek gegenereerd\n");
     }
 
-    private void newPrestation(WorkWeek w, Scanner kb) {
+    private void addNewPerformance(WorkWeek w, Scanner kb) {
         System.out.print(NEW_DAY);
         LocalDate dag = LocalDate.parse(kb.next(), FormatUtil.DATE_FORMATTER);
         System.out.print("geef start uur: ");
@@ -57,12 +57,12 @@ public class CaseController {
         if (w.addPerformance(dag, start, endTime(kb)))
             System.out.println("Prestatie toegevoegd!");
         else {
-            System.err.println(DAY_NOT_IN_WEEK);
+            System.err.println("De prestatie werd niet toegevoegd.");
             System.err.println(TRY_AGAIN);
         }
     }
 
-    private void showPrestation(WorkWeek w, Scanner kb) {
+    private void showPerformances(WorkWeek w, Scanner kb) {
         System.out.print(NEW_DAY);
         LocalDate dag = LocalDate.parse(kb.next(), FormatUtil.DATE_FORMATTER);
         System.out.println(w.printDay(dag));

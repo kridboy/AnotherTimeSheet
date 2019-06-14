@@ -89,7 +89,7 @@ public final class Performance {
 
 
     private void determineWage(LocalDate date) {
-        long normalMin = ChronoUnit.MINUTES.between(start, end);
+        long normalMin = ChronoUnit.MINUTES.between(getStart(), getEnd());
 
         switch (date.getDayOfWeek().getValue()) {
             default:
@@ -97,20 +97,28 @@ public final class Performance {
                 break;
 
             case 6:
-                weekendWage(normalMin, WorkRate.ZATERDAG.calc(normalMin + 1), getEnd());
+                weekendWage(normalMin, ZATERDAG.calc(normalMin), getEnd(), 6);
                 break;
 
             case 7:
-                weekendWage(normalMin, WorkRate.ZONDAG.calc(normalMin + 1), getEnd());
+                weekendWage(normalMin, ZONDAG.calc(normalMin), getEnd(), 7);
                 break;
 
         }
     }
 
-    private void weekendWage(long minutes, double rate, LocalTime end) {
-        if (end.equals(MIDNIGHT)) {
+    private void weekendWage(long minutes, double rate, LocalTime end, int dayOfWeek) {
+        if (dayOfWeek == 6) {
+            if (end.equals(MIDNIGHT)) {
+                setExtraMinutes(minutes + 1);
+                setUntaxedWage(rate+ ZATERDAG.calc(1));
+            } else {
+                setExtraMinutes(minutes);
+                setUntaxedWage(rate);
+            }
+        } else if (end.equals(MIDNIGHT)) {
             setExtraMinutes(minutes + 1);
-            setUntaxedWage(rate + 1);
+            setUntaxedWage(rate+ ZONDAG.calc(1));
         } else {
             setExtraMinutes(minutes);
             setUntaxedWage(rate);

@@ -7,7 +7,7 @@ import java.util.List;
 
 import static com.keisse.util.FormatUtil.DATE_FORMATTER;
 
-public class WorkDay {
+public final class WorkDay {
     private LocalDate date;
     private List<Performance> performances = new ArrayList<>();
     private double extraWage;
@@ -67,25 +67,29 @@ public class WorkDay {
     }
 
     public boolean addPerformance(LocalTime start, LocalTime end) {
-        //if (start.isBefore(end) && notBetweenPerformance(start, end)) {
-        Performance performance = new Performance(start, end, getDate());
-        performances.add(performance);
+        if (start.isBefore(end) && notBetweenPerformance(start, end)) {
+            Performance performance = new Performance(start, end, getDate());
+            performances.add(performance);
 
-        setUntaxedTotal(performance.getUntaxedWage() + getUntaxedTotal());
-        setBtw(performance.btw() + getBtw());
-        setNormalWage(performance.normalWage() + getNormalWage());
-        setExtraWage(performance.extraWage() + getExtraWage());
-        return true;
-        //}
-        //return false;
+            setUntaxedTotal(performance.getUntaxedWage() + getUntaxedTotal());
+            setBtw(performance.btw() + getBtw());
+            setNormalWage(performance.normalWage() + getNormalWage());
+            setExtraWage(performance.extraWage() + getExtraWage());
+            return true;
+        }
+        return false;
     }
 
-
     public boolean notBetweenPerformance(LocalTime start, LocalTime end) {
-        for (Performance e : getPerformances())
-            if (end.isBefore(e.getStart()) || start.isAfter(e.getEnd()))
-                return true;
-        return false;
+        if (!getPerformances().isEmpty())
+            for (Performance e : getPerformances()) {
+                if (end.isBefore(e.getStart()) || start.isAfter(e.getEnd()))
+                    return true;
+                else
+                    return false;
+            }
+            return true;
+
     }
 
     public void clear() {
