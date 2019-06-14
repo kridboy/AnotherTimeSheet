@@ -111,7 +111,7 @@ public final class Performance {
                 break;
 
             default:
-                weekWage(normalMin, getEnd());
+                fillWeekWage(normalMin, getEnd());
                 break;
         }
     }
@@ -122,7 +122,7 @@ public final class Performance {
     }
 
 
-    private void weekWage(long normalMin, LocalTime end) {
+    private void fillWeekWage(long normalMin, LocalTime end) {
         long extraMin = getStart().isBefore(NORMAL_RATE_START) ? ChronoUnit.MINUTES.between(start, NORMAL_RATE_START) : 0;
 
         if (end.isAfter(NORMAL_RATE_END)) {
