@@ -41,7 +41,7 @@ public class WorkWeek {
     }
 
     public StringBuilder printDay(LocalDate date) {
-        StringBuilder builder = PERFORMANCES_HEADER;
+        StringBuilder builder = new StringBuilder(PERFORMANCES_HEADER);
         Stream.of(getWorkWeek())
                 .filter(e -> e.getDate().equals(date))
                 .map(WorkDay::printPerformances)
@@ -52,9 +52,9 @@ public class WorkWeek {
     }
 
     public StringBuilder printAllDays() {
-        StringBuilder builder = PERFORMANCES_HEADER;
+        StringBuilder builder = new StringBuilder(PERFORMANCES_HEADER);
         Stream.of(getWorkWeek())
-                .filter(e -> e.getPerformances().isEmpty())
+                .filter(e -> !e.getPerformances().isEmpty())
                 .map(WorkDay::printPerformances)
                 .forEach(builder::append);
         builder.append(printTotalWage());
@@ -88,6 +88,7 @@ public class WorkWeek {
 
     public StringBuilder printWage(LocalDate date) {
         WorkDay workDay = new WorkDay();
+        //TODO LOGICA FOUTJE HIER! oplossen morgen dus
         for (WorkDay e : workWeek)
             if (e.getDate().equals(date) && e.getDate().getDayOfWeek().getValue() == 6)
                 return collectWageData(0d, 0d, e.getExtraWage(), 0d, e.getUntaxedTotal(), e.getBtw());
