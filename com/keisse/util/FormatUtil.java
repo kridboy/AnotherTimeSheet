@@ -45,8 +45,6 @@ public abstract class FormatUtil {
      */
     public static final String DAY_NOT_IN_WEEK = "\nDeze dag bevind zich niet in de werkweek.\n";
 
-    public static final LocalTime MIDNIGHT = LocalTime.of(23, 59);
-
     private FormatUtil() {
         throw new IllegalStateException("Utility class");
     }

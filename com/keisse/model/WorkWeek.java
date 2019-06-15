@@ -67,28 +67,8 @@ public final class WorkWeek {
                 .filter(e -> !e.getPerformances().isEmpty())
                 .map(WorkDay::printPerformances)
                 .forEach(builder::append);
-        builder.append(printTotalWage());
+        builder.append(totalWage());
         return builder;
-    }
-
-    private StringBuilder printTotalWage() {
-        //Function<WorkDay,Double> normalWageFunc = WorkDay::getNormalWage;
-
-        Double normal = deduceTotalWage(WorkDay::getNormalWage);
-        Double extra = deduceTotalWage(WorkDay::getExtraWage);
-        Double unTaxed = deduceTotalWage(WorkDay::getUntaxedTotal);
-        Double btw = deduceTotalWage(WorkDay::getBtw);
-
-        Double sat = workWeek[5].getExtraWage();
-        Double sun = workWeek[6].getExtraWage();
-
-        return collectWageData(normal, extra, sat, sun, unTaxed, btw);
-    }
-
-    private Double deduceTotalWage(Function<WorkDay, Double> func){
-        return Stream.of(getWorkWeek())
-                .map(func)
-                .reduce(0d, Double::sum);
     }
 
     public StringBuilder printWage(LocalDate date) {
@@ -105,10 +85,30 @@ public final class WorkWeek {
         return new StringBuilder("empty?");
     }
 
+    private StringBuilder totalWage() {
+        //Function<WorkDay,Double> normalWageFunc = WorkDay::getNormalWage;
+
+        Double normal = deduceTotalWage(WorkDay::getNormalWage);
+        Double extra = deduceTotalWage(WorkDay::getExtraWage);
+        Double unTaxed = deduceTotalWage(WorkDay::getUntaxedTotal);
+        Double btw = deduceTotalWage(WorkDay::getBtw);
+
+        Double sat = workWeek[5].getUntaxedTotal();
+        Double sun = workWeek[6].getUntaxedTotal();
+
+        return collectWageData(normal, extra, sat, sun, unTaxed, btw);
+    }
+
+    private Double deduceTotalWage(Function<WorkDay, Double> func){
+        return Stream.of(getWorkWeek())
+                .map(func)
+                .reduce(0d, Double::sum);
+    }
+
     private StringBuilder collectWageData(Double normal, Double extra, Double sat, Double sun, Double unTaxed, Double btw) {
         return new StringBuilder(SEPARATOR)
                 .append(String.format("\t\tNormaal:\t%.2f€%n", normal))
-                .append(String.format("\t\tOveruren:\t%.2f€%n", extra))
+                .append(String.format("\t\tOveruren:\t%.2f€%n", extra-sat-sun))
                 .append(String.format("\t\tZaterdag:\t%.2f€%n", sat))
                 .append(String.format("\t\tZondag:\t\t%.2f€%n", sun))
                 .append(SEPARATOR)

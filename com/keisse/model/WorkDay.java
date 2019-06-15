@@ -8,12 +8,12 @@ import java.util.List;
 import static com.keisse.util.FormatUtil.DATE_FORMATTER;
 
 public final class WorkDay {
-    private LocalDate date;
-    private final List<Performance> performances = new ArrayList<>();
     private double extraWage;
     private double normalWage;
     private double btw;
     private double untaxedTotal;
+    private LocalDate date;
+    private final List<Performance> performances = new ArrayList<>();
 
     public WorkDay() {
     }

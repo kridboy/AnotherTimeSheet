@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-import static com.keisse.util.FormatUtil.MIDNIGHT;
 import static com.keisse.util.WorkRate.*;
 
 public final class Performance {
@@ -149,9 +148,7 @@ public final class Performance {
     }
 
     private void extraMinutesIfMidnight() {
-        if (getEnd().equals(MIDNIGHT)) {
-            setExtraMinutes(getExtraMinutes() + 1);
-        }
+        if (getEnd().equals(LocalTime.MAX)) setExtraMinutes(getExtraMinutes() + 1);
     }
 
     @Override
