@@ -100,12 +100,11 @@ public final class Performance {
 
         switch (getDayOfPerformance()) {
             case SATURDAY:
-                if (getEnd().equals(MIDNIGHT)) workMinutes++;
+                //     if (getEnd().equals(MIDNIGHT)) workMinutes+=1;
                 fillWeekendWage(workMinutes, ZATERDAG.calc(workMinutes));
                 break;
 
             case SUNDAY:
-                if (getEnd().equals(MIDNIGHT)) workMinutes++;
                 fillWeekendWage(workMinutes, ZONDAG.calc(workMinutes));
                 break;
 
@@ -116,6 +115,7 @@ public final class Performance {
     }
 
     private void fillWeekendWage(long extraMinutes, double rate) {
+        extraMinutesIfMidnight();
         setExtraMinutes(extraMinutes);
         setUntaxedWage(rate);
     }
@@ -123,6 +123,7 @@ public final class Performance {
     private void weekWage(long workMinutes) {
         //not using else operator here. i don't think it impacts the code execution behaviour, since ifFalse there is no
         //execution of logic, but perhaps i should've done this in a case, how though?
+        //there is however the problem of not having a "24:00" Localtime, i could further nest if statements but somehow this doesn't seem like a very good option.
 
         if (getStart().isBefore(NORMAL_RATE_START) && getEnd().isBefore(NORMAL_RATE_START))
             setExtraMinutes(workMinutes);
@@ -132,22 +133,29 @@ public final class Performance {
             setNormalMinutes(ChronoUnit.MINUTES.between(NORMAL_RATE_START, getEnd()));
         }
 
-        if (getStart().isAfter(NORMAL_RATE_START) && getEnd().isBefore(NORMAL_RATE_END))
+        if (getStart().isAfter(NORMAL_RATE_START) && (getEnd().isBefore(NORMAL_RATE_END) || getEnd().equals(NORMAL_RATE_END)))
             setNormalMinutes(workMinutes);
 
         if (getStart().isBefore(NORMAL_RATE_END) && getEnd().isAfter(NORMAL_RATE_END)) {
-            setNormalMinutes(ChronoUnit.MINUTES.between(getStart(), NORMAL_RATE_END));
-            setExtraMinutes(ChronoUnit.MINUTES.between(NORMAL_RATE_START, getEnd()));
+            setNormalMinutes(ChronoUnit.MINUTES.between(NORMAL_RATE_START, NORMAL_RATE_END));
+            setExtraMinutes(ChronoUnit.MINUTES.between(getStart(), NORMAL_RATE_START) + ChronoUnit.MINUTES.between(NORMAL_RATE_END, getEnd()));
         }
 
         if (getStart().isAfter(NORMAL_RATE_END))
             setExtraMinutes(workMinutes);
 
-        setUntaxedWage(NORMAAL.calc(getNormalMinutes()) + OVERUREN.calc(getExtraMinutes()));
+            extraMinutesIfMidnight();
+            setUntaxedWage(NORMAAL.calc(getNormalMinutes()) + OVERUREN.calc(getExtraMinutes()));
+    }
+
+    private void extraMinutesIfMidnight() {
+        if (getEnd().equals(MIDNIGHT)) {
+            setExtraMinutes(getExtraMinutes() + 1);
+        }
     }
 
     @Override
     public String toString() {
-        return String.format("%tR\t%tR\t%tR\t%tR\t\t%.2f%n", getStart(), getEnd(), normalHours(), extraHours(), getUntaxedWage());
+        return String.format("%tR\t%tR\t%tR\t%tR\t\t%.2f€%n", getStart(), getEnd(), normalHours(), extraHours(), getUntaxedWage());
     }
 }

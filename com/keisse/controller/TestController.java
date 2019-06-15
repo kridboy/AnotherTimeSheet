@@ -8,7 +8,7 @@ import java.time.LocalTime;
 public class TestController {
 
 
-    public static void main(String[] args) {
+    public static void go() {
         WorkWeek week = new WorkWeek(LocalDate.of(2019, 6, 7));
         week.addPerformance(LocalDate.of(2019, 6, 7), LocalTime.MIDNIGHT, LocalTime.MAX);
         week.addPerformance(LocalDate.of(2019, 6, 4), LocalTime.of(4, 0), LocalTime.of(12, 0));

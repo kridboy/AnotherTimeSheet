@@ -9,10 +9,10 @@ import java.util.Scanner;
 import static com.keisse.util.FormatUtil.TRY_AGAIN;
 
 public class MenuController {
-    private final WorkWeek w = new WorkWeek();
-    private final CaseController cases = new CaseController();
+    public static void go() {
+        final WorkWeek w = new WorkWeek();
+        final CaseController cases = new CaseController();
 
-    public void go() {
         Scanner kb = new Scanner(System.in);
         boolean m = true;
 
