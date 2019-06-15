@@ -96,21 +96,21 @@ public final class Performance {
     }
 
     private void determineWage() {
-        long normalMin = ChronoUnit.MINUTES.between(getStart(), getEnd());
+        long workMinutes = ChronoUnit.MINUTES.between(getStart(), getEnd());
 
         switch (getDayOfPerformance()) {
             case SATURDAY:
-                if(getEnd().equals(MIDNIGHT)) normalMin++;
-                fillWeekendWage(normalMin, ZATERDAG.calc(normalMin));
+                if (getEnd().equals(MIDNIGHT)) workMinutes++;
+                fillWeekendWage(workMinutes, ZATERDAG.calc(workMinutes));
                 break;
 
             case SUNDAY:
-                if(getEnd().equals(MIDNIGHT)) normalMin++;
-                fillWeekendWage(normalMin, ZONDAG.calc(normalMin));
+                if (getEnd().equals(MIDNIGHT)) workMinutes++;
+                fillWeekendWage(workMinutes, ZONDAG.calc(workMinutes));
                 break;
 
             default:
-                fillWeekWage(normalMin, getEnd());
+                weekWage(workMinutes);
                 break;
         }
     }
@@ -120,18 +120,30 @@ public final class Performance {
         setUntaxedWage(rate);
     }
 
-    private void fillWeekWage(long normalMin, LocalTime end) {
-        long extraMin = getStart().isBefore(NORMAL_RATE_START) ? ChronoUnit.MINUTES.between(start, NORMAL_RATE_START) : 0;
+    private void weekWage(long workMinutes) {
+        //not using else operator here. i don't think it impacts the code execution behaviour, since ifFalse there is no
+        //execution of logic, but perhaps i should've done this in a case, how though?
 
-        if (end.isAfter(NORMAL_RATE_END)) {
-            if (end.equals(MIDNIGHT)) extraMin = ChronoUnit.MINUTES.between(NORMAL_RATE_END, getEnd()) + 1;
-            else extraMin = ChronoUnit.MINUTES.between(NORMAL_RATE_END, getEnd());
+        if (getStart().isBefore(NORMAL_RATE_START) && getEnd().isBefore(NORMAL_RATE_START))
+            setExtraMinutes(workMinutes);
+
+        if (getStart().isBefore(NORMAL_RATE_START) && getEnd().isAfter(NORMAL_RATE_START)) {
+            setExtraMinutes(ChronoUnit.MINUTES.between(getStart(), NORMAL_RATE_START));
+            setNormalMinutes(ChronoUnit.MINUTES.between(NORMAL_RATE_START, getEnd()));
         }
 
-        normalMin -= extraMin;
-        setNormalMinutes(normalMin);
-        setExtraMinutes(extraMin);
-        setUntaxedWage(NORMAAL.calc(normalMin)+OVERUREN.calc(extraMin));
+        if (getStart().isAfter(NORMAL_RATE_START) && getEnd().isBefore(NORMAL_RATE_END))
+            setNormalMinutes(workMinutes);
+
+        if (getStart().isBefore(NORMAL_RATE_END) && getEnd().isAfter(NORMAL_RATE_END)) {
+            setNormalMinutes(ChronoUnit.MINUTES.between(getStart(), NORMAL_RATE_END));
+            setExtraMinutes(ChronoUnit.MINUTES.between(NORMAL_RATE_START, getEnd()));
+        }
+
+        if (getStart().isAfter(NORMAL_RATE_END))
+            setExtraMinutes(workMinutes);
+
+        setUntaxedWage(NORMAAL.calc(getNormalMinutes()) + OVERUREN.calc(getExtraMinutes()));
     }
 
     @Override

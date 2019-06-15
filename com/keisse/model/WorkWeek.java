@@ -50,6 +50,7 @@ public final class WorkWeek {
     }
 
     public StringBuilder printDay(LocalDate date) {
+        //TODO try to see if filters can be used by method references too (make new boolean method which takes param e)
         StringBuilder builder = new StringBuilder(PERFORMANCES_HEADER);
         Stream.of(getWorkWeek())
                 .filter(e -> e.getDate().equals(date))

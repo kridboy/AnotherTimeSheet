@@ -91,10 +91,6 @@ public final class WorkDay {
             return true;
 
     }
-//      if (end.isBefore(e.getStart()) || start.isAfter(e.getEnd()))
-//              return true;
-//                else
-//                        return false;
 
     public void clear() {
         performances.clear();

@@ -17,6 +17,7 @@ public class TestController {
         week.addPerformance(LocalDate.of(2019, 6, 5), LocalTime.of(5, 0), LocalTime.of(20, 0));
         week.addPerformance(LocalDate.of(2019, 6, 8), LocalTime.MIDNIGHT, LocalTime.MAX);
         week.addPerformance(LocalDate.of(2019, 6, 8), LocalTime.of(5, 0), LocalTime.of(20, 0));
+
         System.out.println(week.printAllDays());
     }
 }
