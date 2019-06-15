@@ -9,7 +9,7 @@ import static com.keisse.util.FormatUtil.PERFORMANCES_HEADER;
 import static com.keisse.util.FormatUtil.SEPARATOR;
 
 public final class WorkWeek {
-    public WorkDay[] workWeek = new WorkDay[7];
+    public final WorkDay[] workWeek = new WorkDay[7];
 
 
     public WorkDay[] getWorkWeek() {

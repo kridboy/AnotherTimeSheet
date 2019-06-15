@@ -9,7 +9,7 @@ import static com.keisse.util.FormatUtil.DATE_FORMATTER;
 
 public final class WorkDay {
     private LocalDate date;
-    private List<Performance> performances = new ArrayList<>();
+    private final List<Performance> performances = new ArrayList<>();
     private double extraWage;
     private double normalWage;
     private double btw;

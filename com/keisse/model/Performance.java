@@ -27,7 +27,7 @@ public final class Performance {
         determineWage();
     }
 
-    public DayOfWeek getDayOfPerformance() {
+    private DayOfWeek getDayOfPerformance() {
         return dayOfPerformance;
     }
 
