@@ -72,7 +72,8 @@ public class CaseController {
         System.out.print(NEW_DAY);
         LocalDate dag = LocalDate.parse(kb.next(), FormatUtil.DATE_FORMATTER);
         if (w.clear(dag))
-            System.out.println(String.format("%nDe gegevens van  %s %d %s werden verwijderd.%n", dag.getDayOfWeek().toString().toLowerCase(), dag.getDayOfMonth(), dag.format(MONTH_FORMATTER)));
+            System.out.println(String.format("%nDe gegevens van  %s %d %s werden verwijderd.%n",
+                    dag.getDayOfWeek().toString().toLowerCase(), dag.getDayOfMonth(), dag.format(MONTH_FORMATTER)));
         else {
             System.err.println(DAY_NOT_IN_WEEK);
             System.err.println(TRY_AGAIN);

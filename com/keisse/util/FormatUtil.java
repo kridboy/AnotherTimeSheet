@@ -12,7 +12,14 @@ public abstract class FormatUtil {
     /**
      * The constant PERFORMANCES_HEADER returns a header string for printing prestations.
      */
-    public static final StringBuilder PERFORMANCES_HEADER = new StringBuilder("\nDatum\t\tBegin\tEinde\tNormaal\tOveruren\tWage\n");
+    public static final StringBuilder PERFORMANCES_HEADER =
+            new StringBuilder("\nDatum\t\tBegin\tEinde\tNormaal\tOveruren\tWage\n");
+
+    /**
+     * The constant SEPARATOR returns a header string for printing prestations.
+     */
+    public static final StringBuilder SEPARATOR = new StringBuilder("\t\t\t\t=====\n");
+
     /**
      * The constant DATE_FORMATTER formats a date to follow the given pattern.
      */

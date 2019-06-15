@@ -6,6 +6,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static com.keisse.util.FormatUtil.PERFORMANCES_HEADER;
+import static com.keisse.util.FormatUtil.SEPARATOR;
 
 public final class WorkWeek {
     public WorkDay[] workWeek = new WorkDay[7];
@@ -72,10 +73,10 @@ public final class WorkWeek {
     private StringBuilder printTotalWage() {
         //Function<WorkDay,Double> normalWageFunc = WorkDay::getNormalWage;
 
-        Double normal = printTotalWagePipeline(WorkDay::getNormalWage);
-        Double extra = printTotalWagePipeline(WorkDay::getExtraWage);
-        Double unTaxed = printTotalWagePipeline(WorkDay::getUntaxedTotal);
-        Double btw = printTotalWagePipeline(WorkDay::getBtw);
+        Double normal = deduceTotalWage(WorkDay::getNormalWage);
+        Double extra = deduceTotalWage(WorkDay::getExtraWage);
+        Double unTaxed = deduceTotalWage(WorkDay::getUntaxedTotal);
+        Double btw = deduceTotalWage(WorkDay::getBtw);
 
         Double sat = workWeek[5].getExtraWage();
         Double sun = workWeek[6].getExtraWage();
@@ -83,7 +84,7 @@ public final class WorkWeek {
         return collectWageData(normal, extra, sat, sun, unTaxed, btw);
     }
 
-    private Double printTotalWagePipeline(Function<WorkDay, Double> func){
+    private Double deduceTotalWage(Function<WorkDay, Double> func){
         return Stream.of(getWorkWeek())
                 .map(func)
                 .reduce(0d, Double::sum);
@@ -104,16 +105,16 @@ public final class WorkWeek {
     }
 
     private StringBuilder collectWageData(Double normal, Double extra, Double sat, Double sun, Double unTaxed, Double btw) {
-        return new StringBuilder("\t\t=====\n")
-                .append(String.format("Normaal:\t%.2f€%n", normal))
-                .append(String.format("Overuren:\t%.2f€%n", extra))
-                .append(String.format("Zaterdag:\t%.2f€%n", sat))
-                .append(String.format("Zondag:\t\t%.2f€%n", sun))
-                .append("\t\t=====\n")
-                .append(String.format("Bruto:\t\t%.2f€%n", unTaxed))
-                .append(String.format("Extra:\t\t%.2f€%n", btw))
-                .append("\t\t=====\n")
-                .append(String.format("totaal:\t\t%.2f€%n", unTaxed - btw));
+        return new StringBuilder(SEPARATOR)
+                .append(String.format("\t\tNormaal:\t%.2f€%n", normal))
+                .append(String.format("\t\tOveruren:\t%.2f€%n", extra))
+                .append(String.format("\t\tZaterdag:\t%.2f€%n", sat))
+                .append(String.format("\t\tZondag:\t\t%.2f€%n", sun))
+                .append(SEPARATOR)
+                .append(String.format("\t\tBruto:\t\t%.2f€%n", unTaxed))
+                .append(String.format("\t\tExtra:\t\t%.2f€%n", btw))
+                .append(SEPARATOR)
+                .append(String.format("\t\ttotaal:\t\t%.2f€%n", unTaxed - btw));
     }
 
 }
